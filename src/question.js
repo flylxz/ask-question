@@ -3,7 +3,7 @@ export class Question {
     return fetch('https://ask-a-question-c3b45.firebaseio.com/questions.json', {
       method: 'POST',
       body: JSON.stringify(question),
-      header: {
+      headers: {
         'Content-Type': 'application/json'
       }
     })
@@ -26,7 +26,7 @@ export class Question {
       .then(response => response.json())
       .then(response => {
         if (response && response.error) {
-          return `<p class="error">${response.error}/p>`;
+          return `<p class="error">${response.error}</p>`;
         }
 
         return response
@@ -37,21 +37,21 @@ export class Question {
           : [];
       });
   }
-
   static renderList() {
-    const questions = getQuestionFromLocalStorage();
+    const questions = getQuestionsFromLocalStorage();
 
     const html = questions.length
       ? questions.map(toCard).join('')
-      : "<div class='mui--text-headline'>You didn't ask anything</div>";
+      : `<div class="mui--text-headline">You didn't ask anything</div>`;
 
     const list = document.getElementById('list');
+
     list.innerHTML = html;
   }
 
-  static listToHTML(question) {
-    return question.length
-      ? `<ol>${question
+  static listToHTML(questions) {
+    return questions.length
+      ? `<ol>${questions
           .map(question => `<li>${question.text}</li>`)
           .join('')}</ol>`
       : `<p>Empty list</p>`;
@@ -59,22 +59,22 @@ export class Question {
 }
 
 function addToLocalStorage(question) {
-  const all = getQuestionFromLocalStorage();
+  const all = getQuestionsFromLocalStorage();
   all.push(question);
   localStorage.setItem('questions', JSON.stringify(all));
 }
 
-function getQuestionFromLocalStorage() {
+function getQuestionsFromLocalStorage() {
   return JSON.parse(localStorage.getItem('questions') || '[]');
 }
 
 function toCard(question) {
   return `
-    <div class="mui--text-black-54">    
-    ${new Date(question.date).toLocaleDateString()}
-    ${new Date(question.date).toLocaleTimeString()}
+    <div class="mui--text-black-54">
+      ${new Date(question.date).toLocaleDateString()}
+      ${new Date(question.date).toLocaleTimeString()}
     </div>
     <div>${question.text}</div>
-    <br />
-    `;
+    <br>
+  `;
 }

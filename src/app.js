@@ -1,12 +1,12 @@
 import { Question } from './question';
-import { isValid, createModal } from './utils';
-import { getAuthForm, authWithEmailAndPassword } from './auth';
+import { createModal, isValid } from './utils';
+import { authWithEmailAndPassword, getAuthForm } from './auth';
 import './styles.css';
 
 const form = document.getElementById('form');
 const modalBtn = document.getElementById('modal-btn');
-const input = document.querySelector('#question-input');
-const submitBtn = document.querySelector('#submit');
+const input = form.querySelector('#question-input');
+const submitBtn = form.querySelector('#submit');
 
 window.addEventListener('load', Question.renderList);
 form.addEventListener('submit', submitFormHandler);
@@ -56,9 +56,9 @@ function authFormHandler(event) {
 }
 
 function renderModalAfterAuth(content) {
-  if (typeof cntent === 'string') {
-    createModal('Error', content);
+  if (typeof content === 'string') {
+    createModal('Error!', content);
   } else {
-    createModal('Question list', Question.listToHTML(content));
+    createModal('A list of questions', Question.listToHTML(content));
   }
 }
